@@ -11,10 +11,12 @@ import {
 } from '@midwayjs/core';
 import { UserService } from '../service/user.service';
 import { User } from '../entity/User';
-import { QueryDTO } from '../dto/user/query';
-import { CreateDTO } from '../dto/user/create';
-import { UpdateDTO } from '../dto/user/update';
-import { DeleteDTO } from '../dto/user/delete';
+import {
+  CreateUserDTO,
+  QueryUserDTO,
+  UpdateUserDTO,
+  DeleteUserDTO,
+} from '../dto';
 
 @Controller('/')
 export class UserController {
@@ -31,7 +33,7 @@ export class UserController {
   }
 
   @Get('/user/:id')
-  async getUserById(@Param() parmas: QueryDTO): Promise<User> {
+  async getUserById(@Param() parmas: QueryUserDTO): Promise<User> {
     console.log(parmas);
     const { id } = parmas;
     const user = await this.userService.getUserById(id);
@@ -39,28 +41,28 @@ export class UserController {
   }
 
   @Get('/userId')
-  async getUserInfoById(@Query() parmas: QueryDTO): Promise<User> {
+  async getUserInfoById(@Query() parmas: QueryUserDTO): Promise<User> {
     const { id } = parmas;
     const user = this.userService.getUserInfoById(id);
     return user;
   }
 
   @Post('/user/create')
-  async createUser(@Body() body: CreateDTO) {
+  async createUser(@Body() body: CreateUserDTO) {
     // console.log(body);
     const res = await this.userService.createUser(body);
     return res;
   }
 
   @Post('/user/update')
-  async udpateUser(@Body(ALL) body: UpdateDTO) {
+  async udpateUser(@Body(ALL) body: UpdateUserDTO) {
     // console.log(body);
     const res = await this.userService.updateUser(body);
     return res;
   }
 
   @Post('/user/delete')
-  async deleteUser(@Query() params: DeleteDTO) {
+  async deleteUser(@Query() params: DeleteUserDTO) {
     const { id } = params;
     const res = await this.userService.deleteUser(id);
     // if (!res) {
