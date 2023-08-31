@@ -2,8 +2,7 @@ import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { User } from '../entity/User';
 import { Repository } from 'typeorm';
-import { CreateDTO } from '../dto/user/create';
-import { UpdateDTO } from '../dto/user/update';
+import { CreateUserDTO, UpdateUserDTO } from '../dto';
 import { ServiceError } from '../error/serviceError';
 
 @Provide()
@@ -39,7 +38,7 @@ export class UserService {
     return user;
   }
 
-  async createUser(user: CreateDTO) {
+  async createUser(user: CreateUserDTO) {
     const { userName, age } = user;
     const newUser = new User();
     newUser.userName = userName;
@@ -48,7 +47,7 @@ export class UserService {
     return res;
   }
 
-  async updateUser(user: UpdateDTO) {
+  async updateUser(user: UpdateUserDTO) {
     const { id, userName, age } = user;
     const originUser = await this.userModel.findOne({
       where: {

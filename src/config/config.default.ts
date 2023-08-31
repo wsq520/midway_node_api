@@ -6,7 +6,7 @@ export default {
   // use for cookie sign key, should change to your own and keep security
   keys: '1689835645061_9168',
   koa: {
-    port: 8000,
+    port: 8001,
   },
   typeorm: {
     dataSource: {
@@ -25,5 +25,26 @@ export default {
   },
   upload: {
     mode: 'file',
+  },
+  cors: {
+    // 方法1：
+    // credentials: false,
+
+    // 方法2： credentials不配置也可以
+    // credentials: true,
+    // origin: 'http://localhost:8000',
+
+    // 方法3：可以配置多个origin
+    credentials: true,
+    origin: ctx => {
+      const allowedOrigins = ['http://localhost:8000', 'http://localhost:8002'];
+      const currentRequestOrigin = ctx.get('origin');
+      console.log(currentRequestOrigin);
+      if (allowedOrigins.includes(currentRequestOrigin)) {
+        return currentRequestOrigin;
+      }
+      // 这里可以设置一个默认支持的origin
+      return 'http://localhost:8000';
+    },
   },
 } as MidwayConfig;

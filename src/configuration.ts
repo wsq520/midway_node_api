@@ -5,6 +5,7 @@ import * as info from '@midwayjs/info';
 import * as orm from '@midwayjs/typeorm';
 import * as upload from '@midwayjs/upload';
 import * as staticFile from '@midwayjs/static-file';
+import * as crossDomain from '@midwayjs/cross-domain';
 import { join } from 'path';
 import { ReportMiddleware } from './middleware/report.middleware';
 import { ValidateErrorFilter } from './filter/validate.filter';
@@ -16,6 +17,7 @@ import { ValidateErrorFilter } from './filter/validate.filter';
     validate,
     upload,
     staticFile,
+    crossDomain,
     {
       component: info,
       enabledEnvironment: ['local'],
