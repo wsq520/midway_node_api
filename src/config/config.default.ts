@@ -1,4 +1,6 @@
 import { MidwayConfig } from '@midwayjs/core';
+import { tmpdir } from 'os';
+import { join } from 'path';
 import { User } from '../entity/User';
 import { Photo } from '../entity/Photo';
 
@@ -24,7 +26,20 @@ export default {
     },
   },
   upload: {
-    mode: 'file',
+    mode: 'stream',
+    tmpdir: join(tmpdir(), 'midway-upload-files'),
+  },
+  staticFile: {
+    dirs: {
+      default: {
+        prefix: '/',
+        dir: 'public',
+      },
+      another: {
+        prefix: '/',
+        dir: 'upload',
+      },
+    },
   },
   cors: {
     // 方法1：
