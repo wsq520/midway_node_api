@@ -1,54 +1,57 @@
-import { Controller, Post, Inject, Context, Files } from '@midwayjs/core';
+import { Controller, Post, Inject, Files } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
 import * as path from 'path';
 import * as fs from 'fs';
-// import * as multer from 'multer';
-// import { saveFileToDestination } from '../multer';
-interface IContext extends Context {
-  files: any;
+
+interface IUpoladResponse {
+  message: string;
+  url?: string;
 }
+
+const hostAndport = 'http://localhost:8001';
+
 @Controller('/file')
 export class HomeController {
   @Inject()
-  ctx: IContext;
-
-  // private storage = multer.diskStorage({
-  //   destination: (req, file, cb) => {
-  //     // 设置上传文件的目标文件夹
-  //     cb(null, 'upload/');
-  //   },
-  //   filename: (req, file, cb) => {
-  //     // 自定义文件名
-  //     const ext = path.extname(file.originalname);
-  //     cb(null, Date.now() + ext);
-  //   },
-  // });
-
-  // private uploadInstance = multer({ storage: this.storage }).single('file');
+  ctx: Context;
 
   @Post('/upload')
-  async upload(@Files() files): Promise<string> {
-    console.log('files:', files);
-    console.log(files[0].data);
-    console.log(path.join(__dirname, '../upload'));
-    const transformData = files[0].data;
-    const folderPath = path.join(__dirname, '../../upload'); // 替换为目标文件夹的路径
-    const fileName = 'image123.webp'; // 替换为要写入的文件名
+  // mode为file时
+  async upload(@Files() files): Promise<IUpoladResponse> {
+    const originFilePath = files[0].data; //获取本次上传文件的临时存储路径
+    const extName = path.extname(originFilePath); // 获取拓展名
+    const folderPath = path.join(__dirname, '../../upload'); // 获取指定文件夹的路径
+    // if (!fs.existsSync(folderPath)) {
+    //   console.log('文件夹不存在，即将创建文件夹');
+    //   try {
+    //     fs.mkdirSync(folderPath, { recursive: true });
+    //   } catch (e) {
+    //     console.log('创建文件夹失败', e);
+    //   }
+    // }
 
-    const filePath = path.join(folderPath, fileName);
-    const extName = transformData._ext;
-    console.log(extName);
+    return new Promise((resolve, reject) => {
+      const readStream = fs.createReadStream(originFilePath);
+      const fileName = `${Date.now()}_image${extName}`;
+      const writeStream = fs.createWriteStream(
+        // 这里的 / 不要乱加 否则可能出现读取文件的问题
+        `${folderPath}/${fileName}`
+      );
 
-    const writeStream = fs.createWriteStream(filePath);
+      readStream.pipe(writeStream);
 
-    transformData.pipe(writeStream);
+      writeStream.on('finish', () => {
+        resolve({
+          message: '上传成功',
+          url: `${hostAndport}/${fileName}`,
+        });
+      });
 
-    writeStream.on('finish', () => {
-      console.log('数据写入完成！');
+      writeStream.on('error', err => {
+        reject({
+          message: `上传失败${err}`,
+        });
+      });
     });
-
-    writeStream.on('error', err => {
-      console.error('数据写入出错：', err);
-    });
-    return 'upload~';
   }
 }

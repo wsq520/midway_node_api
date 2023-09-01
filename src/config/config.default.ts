@@ -26,7 +26,7 @@ export default {
     },
   },
   upload: {
-    mode: 'stream',
+    mode: 'file',
     tmpdir: join(tmpdir(), 'midway-upload-files'),
   },
   staticFile: {

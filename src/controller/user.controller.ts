@@ -7,8 +7,8 @@ import {
   Query,
   Body,
   ALL,
-  Context,
 } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
 import { UserService } from '../service/user.service';
 import { User } from '../entity/User';
 import {
@@ -34,7 +34,6 @@ export class UserController {
 
   @Get('/user/:id')
   async getUserById(@Param() parmas: QueryUserDTO): Promise<User> {
-    console.log(parmas);
     const { id } = parmas;
     const user = await this.userService.getUserById(id);
     return user;
