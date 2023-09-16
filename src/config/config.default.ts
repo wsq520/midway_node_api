@@ -8,7 +8,7 @@ export default {
   // use for cookie sign key, should change to your own and keep security
   keys: '1689835645061_9168',
   koa: {
-    port: 8001,
+    port: 8000,
   },
   typeorm: {
     dataSource: {
@@ -23,6 +23,14 @@ export default {
         logging: false,
         entities: [User, Photo],
       },
+    },
+  },
+  redis: {
+    client: {
+      host: '127.0.0.1',
+      port: 6379,
+      password: '',
+      db: 0,
     },
   },
   upload: {

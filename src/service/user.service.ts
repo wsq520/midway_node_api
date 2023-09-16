@@ -1,18 +1,27 @@
-import { Provide } from '@midwayjs/core';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { User } from '../entity/User';
 import { Repository } from 'typeorm';
 import { CreateUserDTO, UpdateUserDTO } from '../dto';
 import { ServiceError } from '../error/serviceError';
+import { cacheService } from './redis.service';
 
 @Provide()
 export class UserService {
   @InjectEntityModel(User)
   userModel: Repository<User>;
 
+  @Inject()
+  cache_service: cacheService;
+
   async getUserList() {
+    const key = 'userList';
+    const cacheRes = await this.cache_service.getCache(key);
+    if (cacheRes) {
+      return cacheRes;
+    }
     const userList = await this.userModel.find();
-    // console.log(userList);
+    await this.cache_service.setCache(key, userList);
     return userList;
   }
 
