@@ -6,6 +6,11 @@ export class cacheService {
   @Inject()
   redisService: RedisService;
 
+  async isExist(key: string) {
+    const res = await this.redisService.exists(key);
+    return !!res;
+  }
+
   async getCache(key: string) {
     const res = await this.redisService.get(key);
     if (res) {
@@ -16,5 +21,14 @@ export class cacheService {
 
   async setCache(key: string, value: any) {
     await this.redisService.set(key, JSON.stringify(value));
+  }
+
+  async deleteCache(key: string) {
+    const isExist = await this.isExist(key);
+    if (isExist) {
+      await this.redisService.del(key);
+      return true;
+    }
+    return false;
   }
 }

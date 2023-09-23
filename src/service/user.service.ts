@@ -16,6 +16,7 @@ export class UserService {
 
   async getUserList() {
     const key = 'userList';
+    await this.cache_service.isExist(key);
     const cacheRes = await this.cache_service.getCache(key);
     if (cacheRes) {
       return cacheRes;
@@ -48,6 +49,8 @@ export class UserService {
   }
 
   async createUser(user: CreateUserDTO) {
+    const key = 'userList';
+    await this.cache_service.deleteCache(key);
     const { userName, age } = user;
     const newUser = new User();
     newUser.userName = userName;
