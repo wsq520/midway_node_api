@@ -6,7 +6,7 @@ import * as orm from '@midwayjs/typeorm';
 import * as upload from '@midwayjs/upload';
 import * as staticFile from '@midwayjs/static-file';
 import * as crossDomain from '@midwayjs/cross-domain';
-import * as redis from '@midwayjs/redis';
+// import * as redis from '@midwayjs/redis';
 import { join } from 'path';
 import { ReportMiddleware } from './middleware/report.middleware';
 import { ValidateErrorFilter } from './filter/validate.filter';
@@ -19,7 +19,7 @@ import { ValidateErrorFilter } from './filter/validate.filter';
     upload,
     staticFile,
     crossDomain,
-    redis,
+    // redis,
     {
       component: info,
       enabledEnvironment: ['local'],

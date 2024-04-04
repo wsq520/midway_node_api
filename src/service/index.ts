@@ -1,0 +1,18 @@
+export * from './admin.service'
+export * from './club_account_registry.service'
+export * from './clubmember.service'
+export * from './clubs.service'
+export * from './clubtype.service'
+export * from './college.service'
+export * from './club_gonggao.service'
+export * from './grade.service'
+export * from './land.service'
+export * from './major.service'
+export * from './student.service'
+export * from './swiper.service'
+export * from './zhaoxinpublish.service'
+export * from './echarts.service'
+
+export * from './util.service'
+
+export * from './club_huodong.service'
